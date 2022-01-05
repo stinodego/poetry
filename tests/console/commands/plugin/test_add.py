@@ -5,7 +5,6 @@ from typing import Union
 import pytest
 
 from poetry.core.packages.package import Package
-
 from poetry.factory import Factory
 
 

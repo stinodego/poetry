@@ -12,8 +12,9 @@ except ImportError:
     import urlparse
 
 if TYPE_CHECKING:
-    from poetry.core.vcs import Git
     from pytest_mock import MockerFixture
+
+    from poetry.core.vcs import Git
 
 
 def mock_clone(self: "Git", source: str, dest: Path) -> None:

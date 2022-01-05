@@ -11,7 +11,6 @@ from poetry.core.packages.package import Package
 from poetry.core.packages.utils.utils import url_to_path
 from poetry.core.utils.helpers import canonicalize_name
 from poetry.core.utils.helpers import module_name
-
 from poetry.repositories.repository import Repository
 from poetry.utils._compat import metadata
 
@@ -49,8 +48,8 @@ class InstalledRepository(Repository):
         paths = set()
 
         # we identify the candidate pth files to check, this is done so to handle cases
-        # where the pth file for foo-bar might have been installed as either foo-bar.pth or
-        # foo_bar.pth (expected) in either pure or platform lib directories.
+        # where the pth file for foo-bar might have been installed as either foo-bar.pth
+        # or foo_bar.pth (expected) in either pure or platform lib directories.
         candidates = itertools.product(
             {env.purelib, env.platlib},
             {name, module_name(name)},

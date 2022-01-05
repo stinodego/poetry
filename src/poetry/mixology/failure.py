@@ -5,7 +5,6 @@ from typing import Optional
 from typing import Tuple
 
 from poetry.core.semver.helpers import parse_constraint
-
 from poetry.mixology.incompatibility_cause import ConflictCause
 from poetry.mixology.incompatibility_cause import PythonCause
 
@@ -43,7 +42,8 @@ class _Writer:
             if isinstance(incompatibility.cause, PythonCause):
                 if not required_python_version_notification:
                     buffer.append(
-                        f"The current project's Python requirement ({incompatibility.cause.root_python_version}) "
+                        "The current project's Python requirement "
+                        f"({incompatibility.cause.root_python_version}) "
                         "is not compatible with some of the required "
                         "packages Python requirement:"
                     )
@@ -55,8 +55,8 @@ class _Writer:
                 constraint = parse_constraint(incompatibility.cause.python_version)
                 buffer.append(
                     f"  - {incompatibility.terms[0].dependency.name} requires Python "
-                    f"{incompatibility.cause.python_version}, so it will not be satisfied "
-                    f"for Python {root_constraint.difference(constraint)}"
+                    f"{incompatibility.cause.python_version}, so it will not be "
+                    f"satisfied for Python {root_constraint.difference(constraint)}"
                 )
 
         if required_python_version_notification:
@@ -145,7 +145,8 @@ class _Writer:
                 self._visit(without_line, details_for_cause)
                 self._write(
                     incompatibility,
-                    f"{conjunction} because {with_line!s} ({line}), {incompatibility_string}.",
+                    f"{conjunction} because {with_line!s} ({line}), "
+                    f"{incompatibility_string}.",
                     numbered=numbered,
                 )
             else:
@@ -170,7 +171,9 @@ class _Writer:
 
                     self._write(
                         incompatibility,
-                        f"{conjunction} because {cause.conflict!s} ({self._line_numbers[cause.conflict]}), {incompatibility_string}",
+                        f"{conjunction} because {cause.conflict!s} "
+                        f"({self._line_numbers[cause.conflict]}), "
+                        f"{incompatibility_string}",
                         numbered=numbered,
                     )
         elif isinstance(cause.conflict.cause, ConflictCause) or isinstance(

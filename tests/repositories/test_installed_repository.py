@@ -13,8 +13,9 @@ from tests.compat import zipp
 
 
 if TYPE_CHECKING:
-    from poetry.core.packages.package import Package
     from pytest_mock.plugin import MockerFixture
+
+    from poetry.core.packages.package import Package
 
 FIXTURES_DIR = Path(__file__).parent / "fixtures"
 ENV_DIR = (FIXTURES_DIR / "installed").resolve()

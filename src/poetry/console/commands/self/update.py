@@ -15,7 +15,6 @@ from poetry.console.commands.command import Command
 if TYPE_CHECKING:
     from poetry.core.packages.package import Package
     from poetry.core.semver.version import Version
-
     from poetry.repositories.pool import Pool
 
 
@@ -85,10 +84,9 @@ class SelfUpdateCommand(Command):
         return pool
 
     def handle(self) -> int:
+        from poetry.__version__ import __version__
         from poetry.core.packages.dependency import Dependency
         from poetry.core.semver.version import Version
-
-        from poetry.__version__ import __version__
 
         version = self.argument("version")
         if not version:
@@ -167,10 +165,9 @@ class SelfUpdateCommand(Command):
         self._make_bin()
 
     def _update(self, version: "Version") -> None:
+        from poetry.config.config import Config
         from poetry.core.packages.dependency import Dependency
         from poetry.core.packages.project_package import ProjectPackage
-
-        from poetry.config.config import Config
         from poetry.installation.installer import Installer
         from poetry.packages.locker import NullLocker
         from poetry.repositories.installed_repository import InstalledRepository

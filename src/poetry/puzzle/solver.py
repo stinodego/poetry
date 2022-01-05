@@ -23,6 +23,7 @@ from poetry.puzzle.provider import Provider
 
 if TYPE_CHECKING:
     from cleo.io.io import IO
+
     from poetry.core.packages.dependency import Dependency
     from poetry.core.packages.directory_dependency import DirectoryDependency
     from poetry.core.packages.file_dependency import FileDependency
@@ -30,7 +31,6 @@ if TYPE_CHECKING:
     from poetry.core.packages.project_package import ProjectPackage
     from poetry.core.packages.url_dependency import URLDependency
     from poetry.core.packages.vcs_dependency import VCSDependency
-
     from poetry.puzzle.transaction import Transaction
     from poetry.repositories import Pool
     from poetry.repositories import Repository
@@ -78,10 +78,12 @@ class Solver:
 
             if len(self._overrides) > 1:
                 self._provider.debug(
-                    f"Complete version solving took {end - start:.3f} seconds with {len(self._overrides)} overrides"
+                    f"Complete version solving took {end - start:.3f} seconds "
+                    f"with {len(self._overrides)} overrides"
                 )
                 self._provider.debug(
-                    f"Resolved with overrides: {', '.join(f'({b})' for b in self._overrides)}"
+                    f"Resolved with overrides: "
+                    f"{', '.join(f'({b})' for b in self._overrides)}"
                 )
 
         return Transaction(
@@ -140,7 +142,8 @@ class Solver:
         except SolveFailure as e:
             raise SolverProblemError(e)
 
-        # NOTE passing explicit empty array for seen to reset between invocations during update + install cycle
+        # NOTE passing explicit empty array for seen to reset between invocations
+        # during update + install cycle
         results = dict(
             depth_first_search(
                 PackageNode(self._package, packages, seen=[]), aggregate_package_nodes

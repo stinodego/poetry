@@ -9,7 +9,6 @@ from typing import Any
 from typing import Union
 
 from poetry.core.pyproject.toml import PyProjectTOML
-
 from poetry.installation.base_installer import BaseInstaller
 from poetry.utils._compat import encode
 from poetry.utils.helpers import safe_rmtree
@@ -19,8 +18,8 @@ from poetry.utils.pip import pip_install
 
 if TYPE_CHECKING:
     from cleo.io.io import IO
-    from poetry.core.packages.package import Package
 
+    from poetry.core.packages.package import Package
     from poetry.repositories.pool import Pool
     from poetry.utils.env import Env
 
@@ -52,7 +51,8 @@ class PipInstaller(BaseInstaller):
             parsed = urllib.parse.urlparse(package.source_url)
             if parsed.scheme == "http":
                 self._io.write_error(
-                    f"    <warning>Installing from unsecure host: {parsed.hostname}</warning>"
+                    f"    <warning>Installing from unsecure host: "
+                    f"{parsed.hostname}</warning>"
                 )
                 args += ["--trusted-host", parsed.hostname]
 
@@ -159,7 +159,10 @@ class PipInstaller(BaseInstaller):
             return req
 
         if package.source_type == "git":
-            req = f"git+{package.source_url}@{package.source_reference}#egg={package.name}"
+            req = (
+                f"git+{package.source_url}@{package.source_reference}"
+                f"#egg={package.name}"
+            )
 
             if package.develop:
                 req = ["-e", req]

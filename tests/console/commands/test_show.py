@@ -3,7 +3,6 @@ from typing import TYPE_CHECKING
 import pytest
 
 from poetry.core.packages.dependency_group import DependencyGroup
-
 from poetry.factory import Factory
 from tests.helpers import get_package
 

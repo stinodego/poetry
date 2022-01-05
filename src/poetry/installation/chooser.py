@@ -13,7 +13,6 @@ from poetry.utils.patterns import wheel_file_re
 if TYPE_CHECKING:
     from poetry.core.packages.package import Package
     from poetry.core.packages.utils.link import Link
-
     from poetry.repositories.pool import Pool
     from poetry.utils.env import Env
 
@@ -112,7 +111,8 @@ class Chooser:
 
         if links and not selected_links:
             raise RuntimeError(
-                f"Retrieved digest for link {link.filename}({h}) not in poetry.lock metadata {hashes}"
+                f"Retrieved digest for link {link.filename}({h}) "
+                f"not in poetry.lock metadata {hashes}"
             )
 
         return selected_links

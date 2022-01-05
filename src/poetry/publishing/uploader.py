@@ -11,10 +11,6 @@ from typing import Union
 
 import requests
 
-from poetry.core.masonry.metadata import Metadata
-from poetry.core.masonry.utils.helpers import escape_name
-from poetry.core.masonry.utils.helpers import escape_version
-from poetry.core.utils.helpers import normalize_version
 from requests import adapters
 from requests.exceptions import ConnectionError
 from requests.exceptions import HTTPError
@@ -24,6 +20,10 @@ from requests_toolbelt.multipart import MultipartEncoder
 from requests_toolbelt.multipart import MultipartEncoderMonitor
 
 from poetry.__version__ import __version__
+from poetry.core.masonry.metadata import Metadata
+from poetry.core.masonry.utils.helpers import escape_name
+from poetry.core.masonry.utils.helpers import escape_version
+from poetry.core.utils.helpers import normalize_version
 from poetry.utils.patterns import wheel_file_re
 
 
@@ -83,7 +83,8 @@ class Uploader:
 
         wheels = list(
             dist.glob(
-                f"{escape_name(self._package.pretty_name)}-{escape_version(version)}-*.whl"
+                f"{escape_name(self._package.pretty_name)}-{escape_version(version)}"
+                "-*.whl"
             )
         )
         tars = list(dist.glob(f"{self._package.pretty_name}-{version}.tar.gz"))
@@ -293,9 +294,9 @@ class Uploader:
         Register a package to a repository.
         """
         dist = self._poetry.file.parent / "dist"
-        file = (
-            dist
-            / f"{self._package.name}-{normalize_version(self._package.version.text)}.tar.gz"
+        file = dist / (
+            f"{self._package.name}-{normalize_version(self._package.version.text)}"
+            ".tar.gz"
         )
 
         if not file.exists():

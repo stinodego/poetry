@@ -16,11 +16,11 @@ from typing import Optional
 from typing import Union
 
 from cleo.io.null_io import NullIO
+
 from poetry.core.packages.file_dependency import FileDependency
 from poetry.core.packages.utils.link import Link
 from poetry.core.packages.utils.utils import url_to_path
 from poetry.core.pyproject.toml import PyProjectTOML
-
 from poetry.installation.chef import Chef
 from poetry.installation.chooser import Chooser
 from poetry.utils._compat import decode
@@ -34,9 +34,9 @@ from poetry.utils.pip import pip_install
 
 if TYPE_CHECKING:
     from cleo.io.io import IO
-    from poetry.core.packages.package import Package
 
     from poetry.config.config import Config
+    from poetry.core.packages.package import Package
     from poetry.installation.operations import OperationTypes
     from poetry.installation.operations.install import Install
     from poetry.installation.operations.operation import Operation
@@ -230,7 +230,8 @@ class Executor:
                     with self._lock:
                         self._sections[id(operation)] = self._io.section()
                         self._sections[id(operation)].write_line(
-                            f"  <fg=blue;options=bold>•</> {op_message}: <fg=blue>Pending...</>"
+                            f"  <fg=blue;options=bold>•</> "
+                            f"{op_message}: <fg=blue>Pending...</>"
                         )
             else:
                 if self._should_write_operation(operation):
@@ -266,7 +267,11 @@ class Executor:
                 if not self.supports_fancy_output():
                     io = self._io
                 else:
-                    message = f"  <error>•</error> {self.get_operation_message(operation, error=True)}: <error>Failed</error>"
+                    message = (
+                        f"  <error>•</error> "
+                        f"{self.get_operation_message(operation, error=True)}: "
+                        f"<error>Failed</error>"
+                    )
                     self._write(operation, message)
                     io = self._sections.get(id(operation), self._io)
 
@@ -279,7 +284,11 @@ class Executor:
                     self._shutdown = True
         except KeyboardInterrupt:
             try:
-                message = f"  <warning>•</warning> {self.get_operation_message(operation, warning=True)}: <warning>Cancelled</warning>"
+                message = (
+                    f"  <warning>•</warning> "
+                    f"{self.get_operation_message(operation, warning=True)}: "
+                    f"<warning>Cancelled</warning>"
+                )
                 if not self.supports_fancy_output():
                     self._io.write_line(message)
                 else:
@@ -376,21 +385,26 @@ class Executor:
 
         if operation.job_type == "install":
             return (
-                f"<{base_tag}>Installing <{package_color}>{operation.package.name}</{package_color}> "
+                f"<{base_tag}>Installing "
+                f"<{package_color}>{operation.package.name}</{package_color}> "
                 f"(<{operation_color}>{operation.package.full_pretty_version}</>)</>"
             )
 
         if operation.job_type == "uninstall":
             return (
-                f"<{base_tag}>Removing <{package_color}>{operation.package.name}</{package_color}> "
+                f"<{base_tag}>Removing "
+                f"<{package_color}>{operation.package.name}</{package_color}> "
                 f"(<{operation_color}>{operation.package.full_pretty_version}</>)</>"
             )
 
         if operation.job_type == "update":
             return (
-                f"<{base_tag}>Updating <{package_color}>{operation.initial_package.name}</{package_color}> "
-                f"(<{source_operation_color}>{operation.initial_package.full_pretty_version}</{source_operation_color}> "
-                f"-> <{operation_color}>{operation.target_package.full_pretty_version}</>)</>"
+                f"<{base_tag}>Updating "
+                f"<{package_color}>{operation.initial_package.name}</{package_color}> "
+                f"(<{source_operation_color}>"
+                f"{operation.initial_package.full_pretty_version}"
+                f"</{source_operation_color}> -> <{operation_color}>"
+                f"{operation.target_package.full_pretty_version}</>)</>"
             )
         return ""
 
@@ -464,7 +478,10 @@ class Executor:
             archive = self._download(operation)
 
         operation_message = self.get_operation_message(operation)
-        message = f"  <fg=blue;options=bold>•</> {operation_message}: <info>Installing...</info>"
+        message = (
+            f"  <fg=blue;options=bold>•</> {operation_message}: "
+            f"<info>Installing...</info>"
+        )
         self._write(operation, message)
         return self.pip_install(archive, upgrade=operation.job_type == "update")
 
@@ -492,7 +509,10 @@ class Executor:
         package = operation.package
         operation_message = self.get_operation_message(operation)
 
-        message = f"  <fg=blue;options=bold>•</> {operation_message}: <info>Preparing...</info>"
+        message = (
+            f"  <fg=blue;options=bold>•</> {operation_message}: "
+            f"<info>Preparing...</info>"
+        )
         self._write(operation, message)
 
         archive = Path(package.source_url)
@@ -509,7 +529,10 @@ class Executor:
         package = operation.package
         operation_message = self.get_operation_message(operation)
 
-        message = f"  <fg=blue;options=bold>•</> {operation_message}: <info>Building...</info>"
+        message = (
+            f"  <fg=blue;options=bold>•</> {operation_message}: "
+            f"<info>Building...</info>"
+        )
         self._write(operation, message)
 
         if package.root_dir:
@@ -644,7 +667,8 @@ class Executor:
 
         if archive_hash not in known_hashes:
             raise RuntimeError(
-                f"Hash for {package} from archive {archive_path.name} not found in known hashes (was: {archive_hash})"
+                f"Hash for {package} from archive {archive_path.name} not found "
+                f"in known hashes (was: {archive_hash})"
             )
 
         return archive_hash

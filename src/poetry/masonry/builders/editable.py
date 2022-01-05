@@ -11,7 +11,6 @@ from poetry.core.masonry.builders.builder import Builder
 from poetry.core.masonry.builders.sdist import SdistBuilder
 from poetry.core.masonry.utils.package_include import PackageInclude
 from poetry.core.semver.version import Version
-
 from poetry.utils._compat import WINDOWS
 from poetry.utils._compat import decode
 from poetry.utils.helpers import is_dir_writable
@@ -20,8 +19,8 @@ from poetry.utils.pip import pip_editable_install
 
 if TYPE_CHECKING:
     from cleo.io.io import IO
-    from poetry.core.poetry import Poetry
 
+    from poetry.core.poetry import Poetry
     from poetry.utils.env import Env
 
 SCRIPT_TEMPLATE = """\
@@ -47,7 +46,8 @@ class EditableBuilder(Builder):
 
     def build(self) -> None:
         self._debug(
-            f"  - Building package <c1>{self._package.name}</c1> in <info>editable</info> mode"
+            f"  - Building package <c1>{self._package.name}</c1> "
+            f"in <info>editable</info> mode"
         )
 
         if self._package.build_script:
@@ -63,7 +63,8 @@ class EditableBuilder(Builder):
             distribution_name=self._package.name
         ):
             self._debug(
-                f"  - Removed <c2>{removed.name}</c2> directory from <b>{removed.parent}</b>"
+                f"  - Removed <c2>{removed.name}</c2> directory "
+                f"from <b>{removed.parent}</b>"
             )
 
         added_files = []
@@ -121,7 +122,8 @@ class EditableBuilder(Builder):
         # remove any pre-existing pth files for this package
         for file in self._env.site_packages.find(path=pth_file, writable_only=True):
             self._debug(
-                f"  - Removing existing <c2>{file.name}</c2> from <b>{file.parent}</b> for {self._poetry.file.parent}"
+                f"  - Removing existing <c2>{file.name}</c2> from <b>{file.parent}</b> "
+                f"for {self._poetry.file.parent}"
             )
             # We can't use unlink(missing_ok=True) because it's not always available
             if file.exists():
@@ -132,13 +134,15 @@ class EditableBuilder(Builder):
                 pth_file, content, encoding="utf-8"
             )
             self._debug(
-                f"  - Adding <c2>{pth_file.name}</c2> to <b>{pth_file.parent}</b> for {self._poetry.file.parent}"
+                f"  - Adding <c2>{pth_file.name}</c2> to <b>{pth_file.parent}</b> "
+                f"for {self._poetry.file.parent}"
             )
             return [pth_file]
         except OSError:
             # TODO: Replace with PermissionError
             self._io.write_error_line(
-                f"  - Failed to create <c2>{pth_file.name}</c2> for {self._poetry.file.parent}"
+                f"  - Failed to create <c2>{pth_file.name}</c2> "
+                f"for {self._poetry.file.parent}"
             )
             return []
 
@@ -151,7 +155,8 @@ class EditableBuilder(Builder):
                 break
         else:
             self._io.write_error_line(
-                f"  - Failed to find a suitable script installation directory for {self._poetry.file.parent}"
+                f"  - Failed to find a suitable script installation directory "
+                f"for {self._poetry.file.parent}"
             )
             return []
 
@@ -185,7 +190,8 @@ class EditableBuilder(Builder):
                 cmd_script = script_file.with_suffix(".cmd")
                 cmd = WINDOWS_CMD_TEMPLATE.format(python=self._env.python, script=name)
                 self._debug(
-                    f"  - Adding the <c2>{cmd_script.name}</c2> script wrapper to <b>{scripts_path}</b>"
+                    f"  - Adding the <c2>{cmd_script.name}</c2> script wrapper "
+                    f"to <b>{scripts_path}</b>"
                 )
 
                 with cmd_script.open("w", encoding="utf-8") as f:
@@ -204,7 +210,8 @@ class EditableBuilder(Builder):
         dist_info = self._env.site_packages.mkdir(Path(builder.dist_info))
 
         self._debug(
-            f"  - Adding the <c2>{dist_info.name}</c2> directory to <b>{dist_info.parent}</b>"
+            f"  - Adding the <c2>{dist_info.name}</c2> directory "
+            f"to <b>{dist_info.parent}</b>"
         )
 
         with dist_info.joinpath("METADATA").open("w", encoding="utf-8") as f:

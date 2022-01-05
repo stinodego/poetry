@@ -16,6 +16,7 @@ from cachecontrol.caches.file_cache import FileCache
 from cachecontrol.controller import logger as cache_control_logger
 from cachy import CacheManager
 from html5lib.html5parser import parse
+
 from poetry.core.packages.dependency import Dependency
 from poetry.core.packages.package import Package
 from poetry.core.packages.utils.link import Link
@@ -24,7 +25,6 @@ from poetry.core.semver.version_constraint import VersionConstraint
 from poetry.core.semver.version_range import VersionRange
 from poetry.core.version.exceptions import InvalidVersion
 from poetry.core.version.markers import parse_marker
-
 from poetry.locations import REPOSITORY_CACHE_DIR
 from poetry.repositories.exceptions import PackageNotFound
 from poetry.repositories.remote_repository import RemoteRepository
@@ -121,7 +121,8 @@ class PyPiRepository(RemoteRepository):
             if not release:
                 # Bad release
                 self._log(
-                    f"No release information found for {dependency.name}-{version}, skipping",
+                    "No release information found for "
+                    f"{dependency.name}-{version}, skipping",
                     level="debug",
                 )
                 continue
@@ -130,7 +131,8 @@ class PyPiRepository(RemoteRepository):
                 package = Package(info["info"]["name"], version)
             except InvalidVersion:
                 self._log(
-                    f'Unable to parse version "{version}" for the {dependency.name} package, skipping',
+                    f'Unable to parse version "{version}" '
+                    f"for the {dependency.name} package, skipping",
                     level="debug",
                 )
                 continue
@@ -183,7 +185,8 @@ class PyPiRepository(RemoteRepository):
                 results.append(result)
             except InvalidVersion:
                 self._log(
-                    f'Unable to parse version "{version}" for the {name} package, skipping',
+                    f'Unable to parse version "{version}" '
+                    f"for the {name} package, skipping",
                     level="debug",
                 )
 

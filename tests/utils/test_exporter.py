@@ -14,7 +14,6 @@ import pytest
 
 from poetry.core.packages.dependency import Dependency
 from poetry.core.toml.file import TOMLFile
-
 from poetry.factory import Factory
 from poetry.packages import Locker as BaseLocker
 from poetry.repositories.legacy_repository import LegacyRepository

@@ -29,7 +29,6 @@ class NewCommand(Command):
         from pathlib import Path
 
         from poetry.core.vcs.git import GitConfig
-
         from poetry.layouts import layout
         from poetry.utils.env import SystemEnv
 
@@ -40,7 +39,8 @@ class NewCommand(Command):
 
         path = Path(self.argument("path"))
         if not path.is_absolute():
-            # we do not use resolve here due to compatibility issues for path.resolve(strict=False)
+            # we do not use resolve here due to compatibility issues
+            # for path.resolve(strict=False)
             path = Path.cwd().joinpath(path)
 
         name = self.option("name")
@@ -81,5 +81,6 @@ class NewCommand(Command):
             path = path.relative_to(Path.cwd())
 
         self.line(
-            f"Created package <info>{layout_._package_name}</> in <fg=blue>{path.as_posix()}</>"
+            f"Created package <info>{layout_._package_name}</> "
+            f"in <fg=blue>{path.as_posix()}</>"
         )

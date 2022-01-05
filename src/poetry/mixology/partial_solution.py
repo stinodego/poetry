@@ -9,7 +9,6 @@ from poetry.mixology.set_relation import SetRelation
 if TYPE_CHECKING:
     from poetry.core.packages.dependency import Dependency
     from poetry.core.packages.package import Package
-
     from poetry.mixology.incompatibility import Incompatibility
     from poetry.mixology.term import Term
 
@@ -20,7 +19,8 @@ class PartialSolution:
     # what's true for the eventual set of package versions that will comprise the
     # total solution.
     #
-    # See https://github.com/dart-lang/mixology/tree/master/doc/solver.md#partial-solution.
+    # See
+    # https://github.com/dart-lang/mixology/tree/master/doc/solver.md#partial-solution.
     """
 
     def __init__(self) -> None:

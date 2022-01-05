@@ -3,9 +3,8 @@ from typing import TYPE_CHECKING
 import pytest
 import tomlkit
 
-from poetry.core.packages.package import Package
-
 from poetry.__version__ import __version__
+from poetry.core.packages.package import Package
 from poetry.layouts.layout import POETRY_DEFAULT
 
 

@@ -34,11 +34,11 @@ from packaging.tags import Tag
 from packaging.tags import interpreter_name
 from packaging.tags import interpreter_version
 from packaging.tags import sys_tags
+from virtualenv.seed.wheels.embed import get_embed_wheel
+
 from poetry.core.semver.helpers import parse_constraint
 from poetry.core.semver.version import Version
 from poetry.core.toml.file import TOMLFile
-from virtualenv.seed.wheels.embed import get_embed_wheel
-
 from poetry.locations import CACHE_DIR
 from poetry.utils._compat import decode
 from poetry.utils._compat import encode
@@ -51,8 +51,8 @@ from poetry.utils.helpers import temporary_directory
 
 if TYPE_CHECKING:
     from cleo.io.io import IO
-    from poetry.core.version.markers import BaseMarker
 
+    from poetry.core.version.markers import BaseMarker
     from poetry.poetry import Poetry
 
 
@@ -117,7 +117,8 @@ env = {
     "sys_platform": sys.platform,
     "version_info": tuple(sys.version_info),
     # Extra information
-    "interpreter_name": INTERPRETER_SHORT_NAMES.get(implementation_name, implementation_name),
+    "interpreter_name": \
+INTERPRETER_SHORT_NAMES.get(implementation_name, implementation_name),
     "interpreter_version": interpreter_version(),
 }
 
@@ -262,7 +263,8 @@ class SitePackages:
 
         if not results and strict:
             raise RuntimeError(
-                f'Unable to find a suitable destination for "{path}" in {paths_csv(self._candidates)}'
+                f"Unable to find a suitable destination "
+                f'for "{path}" in {paths_csv(self._candidates)}'
             )
 
         return results
@@ -416,7 +418,10 @@ class EnvCommandError(EnvError):
     def __init__(self, e: CalledProcessError, input: Optional[str] = None) -> None:
         self.e = e
 
-        message = f"Command {e.cmd} errored with the following return code {e.returncode}, and output: \n{decode(e.output)}"
+        message = (
+            f"Command {e.cmd} errored with the following return code {e.returncode}, "
+            f"and output: \n{decode(e.output)}"
+        )
         if input:
             message += f"input was : {input}"
         super().__init__(message)
@@ -450,6 +455,9 @@ class EnvManager:
     _env = None
 
     ENVS_FILE = "envs.toml"
+    VERSION_SCRIPT = (
+        "\"import sys; print('.'.join([str(s) for s in sys.version_info[:3]]))\""
+    )
 
     def __init__(self, poetry: "Poetry") -> None:
         self._poetry = poetry
@@ -477,13 +485,7 @@ class EnvManager:
         try:
             python_version = decode(
                 subprocess.check_output(
-                    list_to_shell_command(
-                        [
-                            python,
-                            "-c",
-                            "\"import sys; print('.'.join([str(s) for s in sys.version_info[:3]]))\"",
-                        ]
-                    ),
+                    list_to_shell_command([python, "-c", self.VERSION_SCRIPT]),
                     shell=True,
                 )
             )
@@ -723,13 +725,7 @@ class EnvManager:
         try:
             python_version = decode(
                 subprocess.check_output(
-                    list_to_shell_command(
-                        [
-                            python,
-                            "-c",
-                            "\"import sys; print('.'.join([str(s) for s in sys.version_info[:3]]))\"",
-                        ]
-                    ),
+                    list_to_shell_command([python, "-c", self.VERSION_SCRIPT]),
                     shell=True,
                 )
             )
@@ -798,13 +794,7 @@ class EnvManager:
         if executable:
             python_patch = decode(
                 subprocess.check_output(
-                    list_to_shell_command(
-                        [
-                            executable,
-                            "-c",
-                            "\"import sys; print('.'.join([str(s) for s in sys.version_info[:3]]))\"",
-                        ]
-                    ),
+                    list_to_shell_command([executable, "-c", self.VERSION_SCRIPT]),
                     shell=True,
                 ).strip()
             )
@@ -825,8 +815,9 @@ class EnvManager:
 
             io.write_line(
                 f"<warning>The currently activated Python version {python_patch} "
-                f"is not supported by the project ({self._poetry.package.python_versions}).\n"
-                "Trying to find and use a compatible version.</warning> "
+                f"is not supported by the project "
+                f"({self._poetry.package.python_versions}).\n"
+                f"Trying to find and use a compatible version.</warning> "
             )
 
             for python_to_try in sorted(
@@ -852,13 +843,7 @@ class EnvManager:
                 try:
                     python_patch = decode(
                         subprocess.check_output(
-                            list_to_shell_command(
-                                [
-                                    python,
-                                    "-c",
-                                    "\"import sys; print('.'.join([str(s) for s in sys.version_info[:3]]))\"",
-                                ]
-                            ),
+                            list_to_shell_command([python, "-c", self.VERSION_SCRIPT]),
                             stderr=subprocess.STDOUT,
                             shell=True,
                         ).strip()
@@ -904,7 +889,8 @@ class EnvManager:
             if force:
                 if not env.is_sane():
                     io.write_line(
-                        f"<warning>The virtual environment found in {env.path} seems to be broken.</warning>"
+                        f"<warning>The virtual environment found in {env.path} "
+                        f"seems to be broken.</warning>"
                     )
                 io.write_line(f"Recreating virtualenv <c1>{name}</> in {venv!s}")
                 self.remove_venv(venv)
@@ -965,7 +951,8 @@ class EnvManager:
             else flags.pop("no-setuptools", True)
         )
 
-        # we want wheels to be enabled when pip is required and it has not been explicitly disabled
+        # we want wheels to be enabled when pip is required and it has not been
+        # explicitly disabled
         flags["no-wheel"] = (
             not with_wheel
             if with_wheel is not None
@@ -1174,7 +1161,8 @@ class Env:
         """
         Path to current pip executable
         """
-        # we do not use as_posix() here due to issues with windows pathlib2 implementation
+        # we do not use as_posix() here due to issues with windows pathlib2
+        # implementation
         path = self._bin(self._pip_executable)
         if not Path(path).exists():
             return str(self.pip_embedded)

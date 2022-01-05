@@ -17,13 +17,6 @@ from typing import Set
 from typing import Tuple
 from typing import Union
 
-from poetry.core.packages.dependency import Dependency
-from poetry.core.packages.package import Package
-from poetry.core.semver.helpers import parse_constraint
-from poetry.core.semver.version import Version
-from poetry.core.toml.file import TOMLFile
-from poetry.core.version.markers import parse_marker
-from poetry.core.version.requirements import InvalidRequirement
 from tomlkit import array
 from tomlkit import document
 from tomlkit import inline_table
@@ -31,6 +24,13 @@ from tomlkit import item
 from tomlkit import table
 from tomlkit.exceptions import TOMLKitError
 
+from poetry.core.packages.dependency import Dependency
+from poetry.core.packages.package import Package
+from poetry.core.semver.helpers import parse_constraint
+from poetry.core.semver.version import Version
+from poetry.core.toml.file import TOMLFile
+from poetry.core.version.markers import parse_marker
+from poetry.core.version.requirements import InvalidRequirement
 from poetry.packages import DependencyPackage
 from poetry.utils.extras import get_extra_package_names
 
@@ -179,7 +179,8 @@ class Locker:
 
                 root_dir = self._lock.path.parent
                 if package.source_type == "directory":
-                    # root dir should be the source of the package relative to the lock path
+                    # root dir should be the source of the package relative
+                    # to the lock path
                     root_dir = Path(package.source_url)
 
                 if isinstance(constraint, list):
@@ -290,7 +291,8 @@ class Locker:
         pinned_versions: bool = False,
         with_nested: bool = False,
     ) -> Iterable[Dependency]:
-        # group packages entries by name, this is required because requirement might use different constraints
+        # group packages entries by name, this is required because requirement might
+        # use different constraints
         packages_by_name = {}
         for pkg in locked_packages:
             if pkg.name not in packages_by_name:
@@ -482,9 +484,11 @@ class Locker:
         lock_version_allowed = accepted_versions.allows(lock_version)
         if lock_version_allowed and current_version < lock_version:
             logger.warning(
-                "The lock file might not be compatible with the current version of Poetry.\n"
-                "Upgrade Poetry to ensure the lock file is read properly or, alternatively, "
-                "regenerate the lock file with the `poetry lock` command."
+                "The lock file might not be compatible with "
+                "the current version of Poetry.\n"
+                "Upgrade Poetry to ensure the lock file is read properly or, "
+                "alternatively, regenerate the lock file with the `poetry lock` "
+                "command."
             )
         elif not lock_version_allowed:
             raise RuntimeError(
