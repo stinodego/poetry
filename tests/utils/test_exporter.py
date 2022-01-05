@@ -456,7 +456,7 @@ def test_exporter_can_export_requirements_txt_with_nested_packages_and_markers(
         ),
         "d": Dependency.create_from_pep_508(
             "d==0.0.1 ; platform_system == 'Windows' and python_version < '3.7'"
-            "or sys_platform == 'win32' and python_version < '3.7'"
+            " or sys_platform == 'win32' and python_version < '3.7'"
         ),
     }
 
@@ -574,7 +574,7 @@ foo==1.2.3 \\
     assert expected == content
 
 
-def test_exporter_can_export_requirements_txt_with_standard_pckgs_and_hashes_disabled(
+def test_exporter_can_export_requirements_txt_with_standard_packages_and_hashes_disabled(  # noqa: E501
     tmp_dir: str, poetry: "Poetry"
 ):
     poetry.locker.mock_lock_data(
@@ -1245,10 +1245,10 @@ def test_exporter_can_export_requirements_txt_with_directory_packages_and_marker
     with (Path(tmp_dir) / "requirements.txt").open(encoding="utf-8") as f:
         content = f.read()
 
-    expected = (
-        f"foo @ {working_directory.as_uri()}/tests/fixtures/"
-        f'sample_project ; python_version < "3.7"\n'
-    )
+    expected = f"""\
+foo @ {working_directory.as_uri()}/tests/fixtures/sample_project ; \
+python_version < "3.7"
+"""
 
     assert expected == content
 
@@ -1331,10 +1331,10 @@ def test_exporter_can_export_requirements_txt_with_file_packages_and_markers(
     with (Path(tmp_dir) / "requirements.txt").open(encoding="utf-8") as f:
         content = f.read()
 
-    expected = (
-        f"foo @ {working_directory.as_uri()}/tests/fixtures/distributions/"
-        f'demo-0.1.0.tar.gz ; python_version < "3.7"\n'
-    )
+    expected = f"""\
+foo @ {working_directory.as_uri()}/tests/fixtures/distributions/demo-0.1.0.tar.gz ; \
+python_version < "3.7"
+"""
 
     assert expected == content
 

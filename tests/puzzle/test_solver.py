@@ -1694,7 +1694,7 @@ def test_solver_ignores_dependencies_with_incompatible_python_full_version_marke
     package_a.add_dependency(
         Dependency.create_from_pep_508(
             'B (<2.0); platform_python_implementation == "PyPy"'
-            'and python_full_version < "2.7.9"'
+            ' and python_full_version < "2.7.9"'
         )
     )
 

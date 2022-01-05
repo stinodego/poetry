@@ -65,8 +65,8 @@ def test_disjoint_constraints(
 
     error = """\
 Because bar (1.0.0) depends on shared (>3.0.0)
- and foo (1.0.0) depends on shared (<=2.0.0),\
- bar (1.0.0) is incompatible with foo (1.0.0).
+ and foo (1.0.0) depends on shared (<=2.0.0), \
+bar (1.0.0) is incompatible with foo (1.0.0).
 So, because myapp depends on both foo (1.0.0) and bar (1.0.0), version solving failed.\
 """
 

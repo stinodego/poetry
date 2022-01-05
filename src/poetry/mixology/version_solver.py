@@ -297,8 +297,8 @@ class VersionSolver:
 
             partially = "" if difference is None else " partially"
             self._log(
-                f"! {most_recent_term} is{partially} satisfied"
-                f" by {most_recent_satisfier}"
+                f"! {most_recent_term} is{partially} satisfied "
+                f"by {most_recent_satisfier}"
             )
             self._log(f'! which is caused by "{most_recent_satisfier.cause}"')
             self._log(f"! thus: {incompatibility}")
