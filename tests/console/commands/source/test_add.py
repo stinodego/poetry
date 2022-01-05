@@ -76,10 +76,11 @@ def test_source_add_error_default_and_secondary(tester: "CommandTester"):
 
 def test_source_add_error_pypi(tester: "CommandTester"):
     tester.execute("pypi https://test.pypi.org/simple/")
-    assert (
-        tester.io.fetch_error().strip()
-        == "Failed to validate addition of pypi: The name [pypi] is reserved for repositories"
+    expected = (
+        "Failed to validate addition of pypi:"
+        " The name [pypi] is reserved for repositories"
     )
+    assert tester.io.fetch_error().strip() == expected
     assert tester.status_code == 1
 
 

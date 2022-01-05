@@ -276,7 +276,8 @@ def test_exporter_can_export_requirements_txt_poetry(tmp_dir: str, poetry: "Poet
         content = f.read()
 
     # The dependency graph:
-    # junit-xml 1.9 Creates JUnit XML test result documents that can be read by tools such as Jenkins
+    # junit-xml 1.9 Creates JUnit XML test result documents that can be read by tools
+    # such as Jenkins
     # └── six *
     # poetry 1.1.4 Python dependency management and packaging made easy.
     # ├── keyring >=21.2.0,<22.0.0
@@ -364,10 +365,12 @@ def test_exporter_can_export_requirements_txt_pyinstaller(
         content = f.read()
 
     # Rationale for the results:
-    #  * PyInstaller has an explicit dependency on altgraph, so it must always be installed.
+    #  * PyInstaller has an explicit dependency on altgraph, so it must always
+    #        be installed.
     #  * PyInstaller requires macholib on Darwin, which in turn requires altgraph.
     # The dependency graph:
-    # pyinstaller 4.0 PyInstaller bundles a Python application and all its dependencies into a single package.
+    # pyinstaller 4.0 PyInstaller bundles a Python application and all its dependencies
+    # into a single package.
     # ├── altgraph *
     # ├── macholib >=1.8 -- only on Darwin
     # │   └── altgraph >=0.15
@@ -453,7 +456,8 @@ def test_exporter_can_export_requirements_txt_with_nested_packages_and_markers(
             "c==7.8.9 ; sys_platform == 'win32' and python_version < '3.7'"
         ),
         "d": Dependency.create_from_pep_508(
-            "d==0.0.1 ; platform_system == 'Windows' and python_version < '3.7' or sys_platform == 'win32' and python_version < '3.7'"
+            "d==0.0.1 ; platform_system == 'Windows' and python_version < '3.7'"
+            "or sys_platform == 'win32' and python_version < '3.7'"
         ),
     }
 
@@ -571,7 +575,7 @@ foo==1.2.3 \\
     assert expected == content
 
 
-def test_exporter_can_export_requirements_txt_with_standard_packages_and_hashes_disabled(
+def test_exporter_can_export_requirements_txt_with_standard_pckgs_and_hashes_disabled(
     tmp_dir: str, poetry: "Poetry"
 ):
     poetry.locker.mock_lock_data(
@@ -1158,7 +1162,10 @@ def test_exporter_can_export_requirements_txt_with_nested_directory_packages(
                     "python-versions": "*",
                     "source": {
                         "type": "directory",
-                        "url": "tests/fixtures/sample_project/../project_with_nested_local/bar",
+                        "url": (
+                            "tests/fixtures/sample_project/../"
+                            "project_with_nested_local/bar"
+                        ),
                         "reference": "",
                     },
                 },
@@ -1170,7 +1177,10 @@ def test_exporter_can_export_requirements_txt_with_nested_directory_packages(
                     "python-versions": "*",
                     "source": {
                         "type": "directory",
-                        "url": "tests/fixtures/sample_project/../project_with_nested_local/bar/..",
+                        "url": (
+                            "tests/fixtures/sample_project/../"
+                            "project_with_nested_local/bar/.."
+                        ),
                         "reference": "",
                     },
                 },
@@ -1236,9 +1246,10 @@ def test_exporter_can_export_requirements_txt_with_directory_packages_and_marker
     with (Path(tmp_dir) / "requirements.txt").open(encoding="utf-8") as f:
         content = f.read()
 
-    expected = f"""\
-foo @ {working_directory.as_uri()}/tests/fixtures/sample_project ; python_version < "3.7"
-"""
+    expected = (
+        f"foo @ {working_directory.as_uri()}/tests/fixtures/"
+        f'sample_project ; python_version < "3.7"\n'
+    )
 
     assert expected == content
 
@@ -1321,9 +1332,10 @@ def test_exporter_can_export_requirements_txt_with_file_packages_and_markers(
     with (Path(tmp_dir) / "requirements.txt").open(encoding="utf-8") as f:
         content = f.read()
 
-    expected = f"""\
-foo @ {working_directory.as_uri()}/tests/fixtures/distributions/demo-0.1.0.tar.gz ; python_version < "3.7"
-"""
+    expected = (
+        f"foo @ {working_directory.as_uri()}/tests/fixtures/distributions/"
+        f'demo-0.1.0.tar.gz ; python_version < "3.7"\n'
+    )
 
     assert expected == content
 
