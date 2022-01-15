@@ -127,8 +127,8 @@ class Factory(BaseFactory):
     ) -> None:
         for source in sources:
             repository = cls.create_legacy_repository(source, config)
-            is_default = source.get("default", False)
-            is_secondary = source.get("secondary", False)
+            is_default = bool(source.get("default", False))
+            is_secondary = bool(source.get("secondary", False))
             if io.is_debug():
                 message = f"Adding repository {repository.name} ({repository.url})"
                 if is_default:
@@ -184,14 +184,15 @@ class Factory(BaseFactory):
         from poetry.layouts.layout import POETRY_DEFAULT
 
         pyproject = tomlkit.loads(POETRY_DEFAULT)
-        content = pyproject["tool"]["poetry"]
+
+        content: tomlkit.container.Container = pyproject["tool"]["poetry"]  # type: ignore[index, assignment]
 
         content["name"] = package.name
         content["version"] = package.version.text
         content["description"] = package.description
         content["authors"] = package.authors
 
-        dependency_section = content["dependencies"]
+        dependency_section: tomlkit.container.Container = content["dependencies"]  # type: ignore[assignment]
         dependency_section["python"] = package.python_versions
 
         for dep in package.requires:

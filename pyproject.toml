@@ -113,7 +113,6 @@ files = "src"
 module = [
   'poetry.config.file_config_source',
   'poetry.console.*',
-  'poetry.factory.*',
   'poetry.inspection.*',
   'poetry.installation.*',
   'poetry.layouts.*',
